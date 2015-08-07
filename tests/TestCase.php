@@ -6,6 +6,7 @@ use yii\di\Container;
 use yii\helpers\ArrayHelper;
 use Yii;
 use yii\redis\Connection;
+use yii\redis\RedisConnection;
 
 /**
  * This is the base class for all yii framework unit tests.
@@ -87,7 +88,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
         if ($params === null) {
             $this->markTestSkipped('No redis server connection configured.');
         }
-        $connection = new Connection($params);
+        $connection = new RedisConnection($params);
 //        if (!@stream_socket_client($connection->hostname . ':' . $connection->port, $errorNumber, $errorDescription, 0.5)) {
 //            $this->markTestSkipped('No redis server running at ' . $connection->hostname . ':' . $connection->port . ' : ' . $errorNumber . ' - ' . $errorDescription);
 //        }
@@ -105,7 +106,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
     {
         $databases = self::getParam('databases');
         $params = isset($databases['redis']) ? $databases['redis'] : [];
-        $db = new Connection($params);
+        $db = new RedisConnection($params);
         if ($reset) {
             $db->open();
             $db->flushdb();
