@@ -62,7 +62,7 @@ class ConnectionTest extends TestCase
     {
         $redis = $this->getConnection();
         $redis->executeCommand('SET',['key1','val1']);
-        $redis->executeCommand('HMSET',['hash1',['hk3','hv3','hk4','hv4']]);
+        $redis->executeCommand('HMSET',['hash1',['hk3'=>'hv3','hk4'=>'hv4']]);
         $redis->executeCommand('RPUSH',['newlist2','tgtgt','tgtt','44',11]);
         $redis->executeCommand('SADD',['newset2','segtggttval','sv1','sv2','sv3']);
         $redis->executeCommand('ZADD',['newz2',2,'ss',3,'pfpf']);

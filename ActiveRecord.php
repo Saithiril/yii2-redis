@@ -127,17 +127,20 @@ class ActiveRecord extends BaseActiveRecord
         $key = static::keyPrefix() . ':a:' . static::buildKey($pk);
         // save attributes
         $setArgs = [$key];
+        $_args = [];
         foreach ($values as $attribute => $value) {
             // only insert attributes that are not null
             if ($value !== null) {
                 if (is_bool($value)) {
                     $value = (int) $value;
                 }
-                $setArgs[] = $attribute;
-                $setArgs[] = $value;
+                $_args[$attribute] = $value;
             }
         }
 
+        if($_args) {
+            $setArgs[] = $_args;
+        }
         if (count($setArgs) > 1) {
             $db->executeCommand('HMSET', $setArgs);
         }
@@ -176,6 +179,7 @@ class ActiveRecord extends BaseActiveRecord
             // save attributes
             $delArgs = [$key];
             $setArgs = [$key];
+            $_args = [];
             foreach ($attributes as $attribute => $value) {
                 if (isset($newPk[$attribute])) {
                     $newPk[$attribute] = $value;
@@ -184,11 +188,13 @@ class ActiveRecord extends BaseActiveRecord
                     if (is_bool($value)) {
                         $value = (int) $value;
                     }
-                    $setArgs[] = $attribute;
-                    $setArgs[] = $value;
+                    $_args[$attribute] = $value;
                 } else {
                     $delArgs[] = $attribute;
                 }
+            }
+            if($_args) {
+                $setArgs[] = $_args;
             }
             $newPk = static::buildKey($newPk);
             $newKey = static::keyPrefix() . ':a:' . $newPk;

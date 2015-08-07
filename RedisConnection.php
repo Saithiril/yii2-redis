@@ -206,7 +206,7 @@ class RedisConnection extends Component
 
 	public function open()
 	{
-		if($this->_redis == null) {
+		if ($this->_redis == null) {
 			$this->_redis = new \Redis();
 			if ($this->_socket) {
 				$connect = $this->_redis->connect($this->_socket);
@@ -241,9 +241,16 @@ class RedisConnection extends Component
 		return call_user_func_array(array($this->_redis, $name), $params);
 	}
 
-	public function close() {
-		if($this->_redis) {
+	public function close()
+	{
+		if ($this->_redis) {
 			$this->_redis->close();
 		}
 	}
+
+	public function getLuaScriptBuilder()
+	{
+		return new LuaScriptBuilder();
+	}
+
 }
